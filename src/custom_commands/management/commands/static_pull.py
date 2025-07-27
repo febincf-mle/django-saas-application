@@ -6,7 +6,8 @@ from helpers.downloaders import download_files_to_local
 STATICFILES_VENDOR_DIR = getattr(settings, 'STATICFILES_VENDOR_DIR')
 STATIC_VENDOR_RESOURCES = {
     'flowbite.min.js': 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js',
-    'flowbite.min.css': 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css'
+    'flowbite.min.css': 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css',
+    'flowbite.min.js.map': 'https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js.map'
 }
 
 

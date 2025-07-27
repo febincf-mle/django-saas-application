@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f789pf3(!odo*4#)b0=&o61hpobz3(&-v^e7_hea8n$wjft#x2'
+SECRET_KEY = config('DJANGO_SECRET_KEY', default=None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = [
     '.railway.app'
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'dummy',
+    'custom_commands',
 ]
 
 MIDDLEWARE = [
@@ -89,6 +91,18 @@ DATABASES = {
     }
 }
 
+DATABASE_URL=config("DATABASE_URL", default=None)
+CONN_MAX_AGE=config("CONN_MAX_AGE", cast=int, default=30)
+
+if DATABASE_URL is not None:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_health_checks=True,
+            conn_max_age=CONN_MAX_AGE
+        )
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -125,6 +139,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
+
+STATICFILES_BASE_DIR = BASE_DIR / 'static'
+STATICFILES_VENDOR_DIR = STATICFILES_BASE_DIR / 'vendors'
+
+STATICFILES_DIRS = [
+    STATICFILES_BASE_DIR
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
